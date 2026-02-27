@@ -45,12 +45,12 @@ export const updateSkill = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const updateSkill = await Skill.findByIdAndUpdate(id, req.body, {
+    const updatedSkill = await Skill.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
     });
 
-    if (!updateSkill) {
+    if (!updatedSkill) {
       return res.status(404).json({
         success: false,
         message: "Skill not found",
@@ -58,7 +58,7 @@ export const updateSkill = async (req: Request, res: Response) => {
     }
     res.status(200).json({
       success: true,
-      data: updateSkill,
+      data: updatedSkill,
     });
   } catch (error) {
     res.status(500).json({
