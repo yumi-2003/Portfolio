@@ -6,10 +6,12 @@ import {
   deleteSkill,
 } from "../controllers/skillController.js";
 import { protect } from "../middleware/authMiddleware.js";
+import { createSkillValidator } from "../validators/skillValidator.js";
+import { validate } from "../middleware/validate.js";
 
 const router = Router();
 
-router.post("/", protect, createSkill);
+router.post("/", protect, createSkillValidator, validate, createSkill);
 router.get("/", protect, getSkills);
 router.put("/:id", protect, updateSkill);
 router.delete("/:id", protect, deleteSkill);
