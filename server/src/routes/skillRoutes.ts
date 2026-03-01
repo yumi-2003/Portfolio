@@ -5,12 +5,13 @@ import {
   updateSkill,
   deleteSkill,
 } from "../controllers/skillController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.post("/", createSkill);
-router.get("/", getSkills);
-router.put("/:id", updateSkill);
-router.delete("/:id", deleteSkill);
+router.post("/", protect, createSkill);
+router.get("/", protect, getSkills);
+router.put("/:id", protect, updateSkill);
+router.delete("/:id", protect, deleteSkill);
 
 export default router;

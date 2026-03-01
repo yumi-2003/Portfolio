@@ -1,5 +1,13 @@
 import nodemailer from "nodemailer";
 
+const escapeHtml = (value: string): string =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 export const sendEmail = async (
   fromName: string,
   fromEmail: string,
@@ -16,16 +24,20 @@ export const sendEmail = async (
 
     console.log("Attempting to send email from:", fromEmail);
 
+    const safeName = escapeHtml(fromName);
+    const safeEmail = escapeHtml(fromEmail);
+    const safeMessage = escapeHtml(message);
+
     const info = await transporter.sendMail({
-      from: `"${fromName}" <${process.env.EMAIL_USER}>`,
+      from: `"${safeName}" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: "New Contact Message from Portfolio",
       replyTo: fromEmail,
       html: `<h2>New Message Received</h2>
-        <p><strong>Name:</strong> ${fromName}</p>
-        <p><strong>Email:</strong> ${fromEmail}</p>
+        <p><strong>Name:</strong> ${safeName}</p>
+        <p><strong>Email:</strong> ${safeEmail}</p>
         <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <p>${safeMessage}</p>
       `,
     });
 
