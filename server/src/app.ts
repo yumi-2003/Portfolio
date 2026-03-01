@@ -5,6 +5,7 @@ import projectRoutes from "./routes/projectRoutes.js";
 import skillRoutes from "./routes/skillRoutes.js";
 import contactRoutes from "./routes/contactRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import { errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
 const configuredOrigins = (process.env.CORS_ORIGINS ?? "")
@@ -43,5 +44,6 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/auth", authRoutes);
+app.use(errorHandler);
 
 export default app;

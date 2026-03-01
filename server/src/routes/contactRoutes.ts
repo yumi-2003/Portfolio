@@ -6,11 +6,12 @@ import {
   deleteContact,
 } from "../controllers/contactController.js";
 import { protect } from "../middleware/authMiddleware.js";
+import { contactLimiter } from "../middleware/rateLimit.js";
 
 const router = Router();
 
-router.post("/", protect, createContact); //public
-router.get("/", getContacts); // protect later
+router.post("/", contactLimiter, createContact); //public
+router.get("/", protect, getContacts); // protect later
 router.patch("/:id/read", protect, markAsRead);
 router.delete("/:id", protect, deleteContact);
 
