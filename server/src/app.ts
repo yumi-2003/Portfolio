@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import xss from "xss-clean";
 
 import projectRoutes from "./routes/projectRoutes.js";
 import skillRoutes from "./routes/skillRoutes.js";
@@ -8,6 +10,15 @@ import authRoutes from "./routes/authRoutes.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
+
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
+// 1️ Security first
+app.use(helmet());
+
+// 2️ CORS
 const configuredOrigins = (process.env.CORS_ORIGINS ?? "")
   .split(",")
   .map((origin) => origin.trim())
@@ -21,29 +32,40 @@ const allowedOrigins =
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
     if (!origin) {
-      callback(null, true);
-      return;
+      return callback(null, true);
     }
 
     if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-      return;
+      return callback(null, true);
     }
 
-    callback(new Error("CORS policy: origin not allowed"));
+    return callback(new Error("CORS policy: origin not allowed"));
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-//middleware
 app.use(cors(corsOptions));
+
+// 3️ Body parser
 app.use(express.json());
 
+//input sanitization
+app.use(mongoSanitize());
+
+//block xss
+app.use(xss());
+
+// 4️ Routes
 app.use("/api/projects", projectRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/auth", authRoutes);
+
+// 5️ Error handler
 app.use(errorHandler);
 
 export default app;
+function mongoSanitize(): any {
+  throw new Error("Function not implemented.");
+}
