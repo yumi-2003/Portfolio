@@ -9,23 +9,32 @@ import AppError from "../utils/AppError.js";
 import catchAsync from "../utils/catchAsync.js";
 
 export const getProjects = catchAsync(async (req: Request, res: Response) => {
-  const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.limit as string) || 5;
-  const skip = (page - 1) * limit;
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const skip = (page - 1) * limit;
 
-  const total = await Project.countDocuments();
-  const projects = await Project.find()
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit);
+    const total = await Project.countDocuments();
+    const projects = await Project.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-  res.status(200).json({
-    success: true,
-    page,
-    totalPages: Math.ceil(total / limit),
-    totalItems: total,
-    data: projects,
-  });
+    res.status(200).json({
+      success: true,
+      page,
+      totalPages: Math.ceil(total / limit),
+      totalItems: total,
+      data: projects,
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+    const message =
+      error instanceof Error ? error.message : "Unknown error while fetching projects";
+    throw new AppError(`Failed to fetch projects: ${message}`, 500);
+  }
 });
 
 // createProject POST /api/projects

@@ -7,14 +7,40 @@ export const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  const isOperational = err instanceof AppError;
-  const statusCode = isOperational ? err.statusCode : 500;
-  const status = isOperational ? err.status : "error";
-  const message = isOperational ? err.message : "Something went wrong";
+  console.error(err);
+
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      success: false,
+      status: err.status,
+      message: err.message,
+    });
+  }
+
+  const isMongooseValidationError = err.name === "ValidationError";
+  if (isMongooseValidationError) {
+    return res.status(400).json({
+      success: false,
+      status: "fail",
+      message: err.message,
+    });
+  }
+
+  const isMongooseCastError = err.name === "CastError";
+  if (isMongooseCastError) {
+    return res.status(400).json({
+      success: false,
+      status: "fail",
+      message: "Invalid resource id",
+    });
+  }
+
+  const message = err.message || "Something went wrong";
+  const statusCode = 500;
 
   res.status(statusCode).json({
     success: false,
-    status,
+    status: "error",
     message,
   });
 };
