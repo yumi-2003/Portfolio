@@ -6,13 +6,18 @@ import catchAsync from "../utils/catchAsync.js";
 
 export const createContact = catchAsync(async (req: Request, res: Response) => {
   const { name, email, message } = req.body;
+
   if (!name || !email || !message) {
     throw new AppError("All fields are required", 400);
   }
 
   const newContact = await Contact.create({ name, email, message });
 
-  await sendEmail(name, email, message);
+  // Fire-and-forget: email failure should not break the response since the
+  // contact has already been persisted to the database.
+  sendEmail(name, email, message).catch((err: unknown) => {
+    console.error("sendEmail failed:", err);
+  });
 
   res.status(201).json({
     success: true,
@@ -21,7 +26,7 @@ export const createContact = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-//get all contacts
+// get all contacts
 export const getContacts = catchAsync(async (req: Request, res: Response) => {
   const contacts = await Contact.find().sort({ createdAt: -1 });
 
@@ -31,7 +36,7 @@ export const getContacts = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-//mark as read
+// mark as read
 export const markAsRead = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -40,6 +45,7 @@ export const markAsRead = catchAsync(async (req: Request, res: Response) => {
     { isRead: true },
     { new: true },
   );
+
   if (!contact) {
     throw new AppError("Message not found", 404);
   }
@@ -50,7 +56,7 @@ export const markAsRead = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-//delete contact
+// delete contact
 export const deleteContact = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const contact = await Contact.findByIdAndDelete(id);

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
 
 import projectRoutes from "./routes/projectRoutes.js";
 import skillRoutes from "./routes/skillRoutes.js";
@@ -50,10 +51,10 @@ app.use(cors(corsOptions));
 // 3️ Body parser
 app.use(express.json());
 
-//input sanitization
+// Input sanitization
 app.use(mongoSanitize());
 
-//block xss
+// Block XSS
 app.use(xss());
 
 // 4️ Routes
@@ -66,6 +67,3 @@ app.use("/api/auth", authRoutes);
 app.use(errorHandler);
 
 export default app;
-function mongoSanitize(): any {
-  throw new Error("Function not implemented.");
-}

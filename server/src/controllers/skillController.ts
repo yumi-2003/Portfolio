@@ -6,6 +6,10 @@ import catchAsync from "../utils/catchAsync.js";
 export const createSkill = catchAsync(async (req: Request, res: Response) => {
   const { name, level, category } = req.body;
 
+  if (!name || !level || !category) {
+    throw new AppError("Name, level, and category are required", 400);
+  }
+
   const skill = await Skill.create({
     name,
     level,
@@ -18,17 +22,25 @@ export const createSkill = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-//get all skills
+// get all skills
 export const getSkills = catchAsync(async (req: Request, res: Response) => {
-  const skills = await Skill.find().sort({ level: -1 });
+  const { category } = req.query;
+  const filter: Record<string, unknown> = {};
+
+  if (category) {
+    filter.category = category;
+  }
+
+  const skills = await Skill.find(filter).sort({ level: -1 });
 
   res.status(200).json({
     success: true,
+    results: skills.length,
     data: skills,
   });
 });
 
-//update skill
+// update skill
 export const updateSkill = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -47,7 +59,7 @@ export const updateSkill = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-//delete skill
+// delete skill
 export const deleteSkill = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
 

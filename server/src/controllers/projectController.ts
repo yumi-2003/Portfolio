@@ -9,10 +9,21 @@ import AppError from "../utils/AppError.js";
 import catchAsync from "../utils/catchAsync.js";
 
 export const getProjects = catchAsync(async (req: Request, res: Response) => {
-  const projects = await Project.find().sort({ createdAt: -1 });
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 5;
+  const skip = (page - 1) * limit;
+
+  const total = await Project.countDocuments();
+  const projects = await Project.find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
 
   res.status(200).json({
     success: true,
+    page,
+    totalPages: Math.ceil(total / limit),
+    totalItems: total,
     data: projects,
   });
 });
@@ -21,6 +32,10 @@ export const getProjects = catchAsync(async (req: Request, res: Response) => {
 export const createProject = catchAsync(async (req: Request, res: Response) => {
   const { title, description, techStack, githubLink, liveLink, featured } =
     req.body;
+
+  if (!title || !description) {
+    throw new AppError("Title and description are required", 400);
+  }
 
   const techArray =
     typeof techStack === "string"
@@ -52,19 +67,21 @@ export const createProject = catchAsync(async (req: Request, res: Response) => {
 });
 
 // getProjectById GET /api/project/:id
-export const getProjectById = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const project = await Project.findById(id);
+export const getProjectById = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const project = await Project.findById(id);
 
-  if (!project) {
-    throw new AppError("Project not found", 404);
-  }
+    if (!project) {
+      throw new AppError("Project not found", 404);
+    }
 
-  res.status(200).json({
-    success: true,
-    data: project,
-  });
-});
+    res.status(200).json({
+      success: true,
+      data: project,
+    });
+  },
+);
 
 // updateProject PUT /api/projects/:id
 export const updateProject = catchAsync(async (req: Request, res: Response) => {
@@ -148,6 +165,10 @@ export const deleteProjectImage = catchAsync(
     const { id } = req.params;
     const { public_id } = req.body;
 
+    if (!public_id) {
+      throw new AppError("public_id is required", 400);
+    }
+
     const project = await Project.findById(id);
 
     if (!project) {
@@ -155,7 +176,9 @@ export const deleteProjectImage = catchAsync(
     }
 
     const currentImages = project.images || [];
-    const imageExists = currentImages.some((img) => img.public_id === public_id);
+    const imageExists = currentImages.some(
+      (img) => img.public_id === public_id,
+    );
     if (!imageExists) {
       throw new AppError("Image not found in project", 400);
     }
