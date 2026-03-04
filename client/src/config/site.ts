@@ -1,16 +1,18 @@
 const socialLinks = {
-  github: "",
+  github: "https://github.com/yumi-2003",
   discord: "",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/ingyin-may-9abb91276/",
   facebook: "",
   instagram: "",
-  email: "",
+  twitter: "",
+  email: "ingyinmay1932003@gmail.com",
 };
 
 export const siteConfig = {
   firstName: "Ingyin",
   LastName: "May",
   position: "Frontend Developer",
+  location: "Yangon, Myanmar",
   socialLinks,
   navLinks: [
     { name: "Home", path: "/" },

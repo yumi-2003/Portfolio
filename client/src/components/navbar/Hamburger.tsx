@@ -22,19 +22,22 @@ const Hamburger = ({ isOpen, setIsOpen }: Props) => {
 
   return (
     <button
-      className="md:hidden relative w-6 h-5 z-[100] flex flex-col justify-between"
+      className="lg:hidden relative w-10 h-10 z-[200] flex items-center justify-center group"
       onClick={() => setIsOpen(!isOpen)}
+      aria-label="Toggle Menu"
     >
-      {[0, 1, 2].map((i) => (
-        <motion.span
-          key={i}
-          custom={i}
-          variants={lineVariants}
-          animate={isOpen ? "open" : "closed"}
-          className="absolute w-full h-[1.5px] bg-white origin-center"
-          style={{ top: 0 }}
-        />
-      ))}
+      <div className="relative w-6 h-[18px]">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            custom={i}
+            variants={lineVariants}
+            animate={isOpen ? "open" : "closed"}
+            className="absolute w-full h-[1.5px] bg-white origin-center"
+            style={{ top: 0 }}
+          />
+        ))}
+      </div>
     </button>
   );
 };
