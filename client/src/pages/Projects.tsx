@@ -1,28 +1,28 @@
-import { useGetProjectsQuery } from "../redux/api/projectApi";
+// import { useGetProjectsQuery } from "../redux/api/projectApi";
 import { motion } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 
 const Projects = () => {
-  const { data: projects, isLoading, error } = useGetProjectsQuery();
+  // const { data: projects, isLoading, error } = useGetProjectsQuery();
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0d0e15] text-white">
-        <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center bg-[#0d0e15] text-white">
+  //       <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+  //     </div>
+  //   );
+  // }
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0d0e15] text-red-500 font-mono">
-        Error loading projects. Please try again later.
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center bg-[#0d0e15] text-red-500 font-mono">
+  //       Error loading projects. Please try again later.
+  //     </div>
+  //   );
+  // }
 
   return (
-    <section className="min-h-screen pt-32 pb-20 px-8 md:px-12 lg:px-24 bg-[#0d0e15]">
+    <section id="projects" className="min-h-screen pt-32 pb-20 px-8 md:px-12 lg:px-24 bg-[#0d0e15]">
       <motion.div
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -33,7 +33,7 @@ const Projects = () => {
         <h1 className="text-5xl md:text-7xl font-serif text-white">Selected Works</h1>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
         {projects?.map((project, index) => (
           <motion.div
             key={project._id}
@@ -78,7 +78,7 @@ const Projects = () => {
             </div>
           </motion.div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 };

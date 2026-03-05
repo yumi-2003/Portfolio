@@ -15,10 +15,10 @@ export const siteConfig = {
   location: "Yangon, Myanmar",
   socialLinks,
   navLinks: [
-    { name: "Home", path: "/" },
-    { name: "Skills", path: "/skills" },
-    { name: "Projects", path: "/projects" },
-    { name: "Contact", path: "/contact" },
+    { name: "Home", path: "/#home" },
+    { name: "Skills", path: "/#skills" },
+    { name: "Projects", path: "/#projects" },
+    { name: "Contact", path: "/#contact" },
   ],
   adminLink: {
     name: "Admin",

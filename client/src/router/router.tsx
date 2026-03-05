@@ -14,27 +14,6 @@ export const router = createBrowserRouter([
         },
       },
       {
-        path: "projects",
-        lazy: async () => {
-          const mod = await import("../pages/Projects");
-          return { Component: mod.default };
-        },
-      },
-      {
-        path: "skills",
-        lazy: async () => {
-          const mod = await import("../pages/Skills");
-          return { Component: mod.default };
-        },
-      },
-      {
-        path: "contact",
-        lazy: async () => {
-          const mod = await import("../pages/Contact");
-          return { Component: mod.default };
-        },
-      },
-      {
         path: "admin",
         lazy: async () => {
           const mod = await import("../pages/AdminLogin");
