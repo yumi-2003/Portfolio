@@ -1,5 +1,6 @@
 import { motion, type Variants } from "framer-motion";
 import React from "react";
+import { Link } from "react-router-dom";
 import { siteConfig } from "../../config/site";
 import { Github, Linkedin, Twitter, Mail, ArrowRight, MoveDown } from "lucide-react";
 
@@ -45,14 +46,14 @@ const HeroBottomInfo: React.FC = () => {
 
       {/* Right: CTA Buttons */}
       <motion.div variants={itemVariants} className="flex items-center gap-10 lg:gap-14 w-full lg:w-auto justify-center lg:justify-end">
-        <button className="flex items-center gap-6 group">
+        <Link to={siteConfig.navLinks.find(l => l.name === "Projects")?.path ?? "/#projects"} className="flex items-center gap-6 group">
           <span className="text-white font-serif text-xl md:text-2xl tracking-wide group-hover:text-accent transition-colors duration-300">
             View Work
           </span>
           <div className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center group-hover:border-accent group-hover:scale-105 transition-all duration-300">
             <ArrowRight size={24} className="text-white group-hover:text-accent transition-colors duration-300" />
           </div>
-        </button>
+        </Link>
         
         <a href="/resume.pdf" className="flex items-center gap-3 text-[10px] md:text-xs tracking-[0.3em] uppercase hover:text-white transition-colors duration-300 font-mono">
           <MoveDown size={14} className="text-gray-500" />

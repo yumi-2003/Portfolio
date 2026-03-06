@@ -4,11 +4,12 @@ import HeroSubtitle from "./HeroSubtitle";
 import HeroBottomInfo from "./HeroBottomInfo";
 import { MoveDown } from "lucide-react";
 
+
 const HeroSection: React.FC = () => {
   return (
     <section className="relative min-h-screen flex flex-col pt-40 pb-20 px-8 md:px-12 lg:px-24 overflow-hidden bg-[#0d0e15]">
       {/* Background large number indicator */}
-      <div className="absolute right-0 top-1/4 -translate-y-1/2 text-[5rem] md:text-[10rem] lg:text-[15rem] font-bold text-accent/5 pointer-events-none select-none z-0">
+      <div className="absolute right-0 top-1/3 -translate-y-1/2 text-[5rem] md:text-[10rem] lg:text-[15rem] font-bold text-accent/5 pointer-events-none select-none z-0">
         01
       </div>
 

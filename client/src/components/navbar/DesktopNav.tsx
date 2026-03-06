@@ -14,18 +14,18 @@ const DesktopNav = () => {
             }`
           }
         >
-          <span className="text-accent/80 font-bold">{`0${index + 1}.`}</span>
-          <span>{link.name}</span>
-          
-          {/* Animated dot indicator instead of underline for a more modern feel if active */}
-          <NavLink
-            to={link.path}
-            className={({ isActive }) => 
-              `absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent transition-opacity duration-300 ${
-                isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
-              }`
-            }
-          />
+          {({ isActive }) => (
+            <>
+              <span className="text-accent/80 font-bold">{`0${index + 1}.`}</span>
+              <span>{link.name}</span>
+              <span
+                aria-hidden="true"
+                className={`absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent transition-opacity duration-300 ${
+                  isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
+                }`}
+              />
+            </>
+          )}
         </NavLink>
       ))}
     </nav>

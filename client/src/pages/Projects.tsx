@@ -1,84 +1,46 @@
-// import { useGetProjectsQuery } from "../redux/api/projectApi";
-import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { fetchProjects } from "../features/projects/projectSlice";
 
 const Projects = () => {
-  // const { data: projects, isLoading, error } = useGetProjectsQuery();
+  const dispatch = useAppDispatch();
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center bg-[#0d0e15] text-white">
-  //       <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
-  //     </div>
-  //   );
-  // }
+  const { projects, loading, error } = useAppSelector((state) => state.projects);
 
-  // if (error) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center bg-[#0d0e15] text-red-500 font-mono">
-  //       Error loading projects. Please try again later.
-  //     </div>
-  //   );
-  // }
+  useEffect(() => {
+    dispatch(fetchProjects());
+  }, [dispatch]);
 
   return (
-    <section id="projects" className="min-h-screen pt-32 pb-20 px-8 md:px-12 lg:px-24 bg-[#0d0e15]">
-      <motion.div
-        initial={{ y: 30, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="mb-16"
-      >
-        <h2 className="text-accent font-mono text-sm tracking-[0.3em] uppercase mb-4">03. Projects</h2>
-        <h1 className="text-5xl md:text-7xl font-serif text-white">Selected Works</h1>
-      </motion.div>
+    <section id="projects" className="relative min-h-screen pt-32 pb-20 px-8 md:px-12 lg:px-24 bg-[#0d0e15]">
+      {/* Background large number indicator */}
+      <div className="absolute right-0 top-1/3 -translate-y-1/2 text-[5rem] md:text-[10rem] lg:text-[15rem] font-bold text-accent/5 pointer-events-none select-none z-0">
+        03
+      </div>
+      <h2 className="text-accent font-mono text-sm tracking-[0.3em] uppercase mb-4">03. Projects</h2>
+      <h1 className="text-5xl md:text-7xl font-serif text-white mb-16">Featured Work</h1>
 
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-        {projects?.map((project, index) => (
-          <motion.div
-            key={project._id}
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: index * 0.1 }}
-            className="group relative"
-          >
-            <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-900 mb-6">
-              <img
-                src={project.image}
-                alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </div>
+      {loading && <p className="text-gray-300">Loading projects...</p>}
 
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-2xl font-serif text-white group-hover:text-accent transition-colors">
-                {project.title}
-              </h3>
-              <div className="flex gap-4">
-                <a href={project.githubLink} className="text-gray-500 hover:text-white transition-colors">
-                  <Github size={20} />
-                </a>
-                <a href={project.liveLink} className="text-gray-500 hover:text-white transition-colors">
-                  <ExternalLink size={20} />
-                </a>
-              </div>
-            </div>
+      {!loading && error && <p className="text-red-400">{error}</p>}
 
-            <p className="text-gray-400 text-sm leading-relaxed mb-6">
-              {project.description}
-            </p>
+      {!loading && !error && projects.length === 0 && (
+        <p className="text-gray-400">No projects available.</p>
+      )}
 
-            <div className="flex flex-wrap gap-2">
-              {project.techStack.map((tech) => (
-                <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] text-gray-400 tracking-wider">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-        ))}
-      </div> */}
+      {!loading && !error && projects.length > 0 && (
+        <div className="grid gap-6 md:grid-cols-2">
+          {projects.map((project) => (
+            <article key={project._id} className="rounded-lg border border-white/10 p-5 bg-white/5">
+              <h3 className="text-xl font-semibold text-white">{project.title}</h3>
+              <p className="mt-2 text-gray-300">{project.description}</p>
+              {project.techStack?.length > 0 && (
+                <p className="mt-3 text-sm text-gray-400">{project.techStack.join(" | ")}</p>
+              )}
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
