@@ -15,7 +15,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="fixed top-0 w-full z-[100] bg-transparent">
+      <header className="fixed top-0 w-full z-[200] bg-transparent">
         <div className="max-w-[1440px] mx-auto flex justify-between items-center px-8 md:px-12 py-10">
           {/* Logo - Left */}
           <NavLink to="/" className="text-xl md:text-2xl font-serif tracking-tighter z-[110] flex gap-1.5 hover:opacity-80 transition-opacity">

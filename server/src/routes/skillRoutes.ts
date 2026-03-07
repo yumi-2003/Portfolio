@@ -12,7 +12,7 @@ import { validate } from "../middleware/validate.js";
 const router = Router();
 
 router.post("/", protect, createSkillValidator, validate, createSkill);
-router.get("/", protect, getSkills);
+router.get("/", getSkills);
 router.put("/:id", protect, updateSkill);
 router.delete("/:id", protect, deleteSkill);
 

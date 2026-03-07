@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../layouts/RootLayout";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -22,10 +23,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        lazy: async () => {
-          const mod = await import("../pages/Dashboard");
-          return { Component: mod.default };
-        },
+        element: <ProtectedRoute />,
+        children: [
+          {
+            index: true,
+            lazy: async () => {
+              const mod = await import("../pages/Dashboard");
+              return { Component: mod.default };
+            },
+          },
+        ],
       },
       {
         path: "*",
