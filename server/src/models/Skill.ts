@@ -4,6 +4,7 @@ export interface ISkill extends Document {
   name: string;
   level: number; //0 - 100
   category: string; // frontend, backend, tools
+  icon?: string;
 }
 
 const skillSchema = new Schema<ISkill>(
@@ -22,6 +23,10 @@ const skillSchema = new Schema<ISkill>(
     category: {
       type: String,
       required: true,
+      trim: true,
+    },
+    icon: {
+      type: String,
       trim: true,
     },
   },
